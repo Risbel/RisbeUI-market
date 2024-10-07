@@ -67,3 +67,60 @@
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+
+    li p {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+
+  /* Code and preformatted text styles */
+  code {
+    background-color: rgb(150, 145, 145);
+    border-radius: 0.4rem;
+    color: white;
+    font-size: 0.85rem;
+    padding: 0.2em 0.2em;
+  }
+
+  pre {
+    background: black;
+    border-radius: 0.5rem;
+    color: rgb(225, 225, 225);
+    font-family: "JetBrainsMono", monospace;
+    margin: 1.5rem 0;
+    width: max-content;
+    min-width: 50%;
+    padding: 0.75rem 1rem;
+
+    code {
+      background: none;
+      color: inherit;
+      font-size: 0.9rem;
+      padding: 0;
+    }
+  }
+
+  blockquote {
+    border-left: 3px solid gainsboro;
+    margin: 1.5rem 4;
+    padding-left: 0.5rem;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--secondary);
+    margin: 2rem 0;
+  }
+}

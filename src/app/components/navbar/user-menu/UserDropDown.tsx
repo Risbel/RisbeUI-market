@@ -10,6 +10,7 @@ import AvatarTrigger from "./AvatarTrigger";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { LogOut } from "lucide-react";
+import Link from "next/link";
 
 const UserDropDown = ({ user }: { user: KindeUser<Record<string, any>> }) => {
   return (
@@ -23,7 +24,9 @@ const UserDropDown = ({ user }: { user: KindeUser<Record<string, any>> }) => {
           <p>{user?.email}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={"/sell"}>Sell</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>
