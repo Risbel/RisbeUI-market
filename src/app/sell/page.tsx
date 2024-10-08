@@ -6,6 +6,7 @@ import React from "react";
 import SelectCategory from "./components/SelectCategory";
 import { Textarea } from "@/components/ui/textarea";
 import TipTapEditor from "../components/editor/Editor";
+import { UploadDropzone } from "../lib/uploadthing";
 
 const Sell = () => {
   return (
@@ -16,7 +17,7 @@ const Sell = () => {
             <CardTitle>Sell your product with easy</CardTitle>
             <CardDescription>Describe your product here in detail so that it can be sold</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-y-10">
+          <CardContent className="flex flex-col gap-y-3 lg:gap-y-5">
             <div className="flex flex-col gap-y-2">
               <Label>Name</Label>
               <Input type="text" placeholder="Name of the product" />
@@ -36,6 +37,14 @@ const Sell = () => {
             <div className="flex flex-col gap-y-2">
               <Label>Description</Label>
               <TipTapEditor />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <Label>Product Images</Label>
+              <UploadDropzone endpoint="imageUploader" />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <Label>Product File</Label>
+              <UploadDropzone endpoint="productFileUpload" />
             </div>
           </CardContent>
           <CardFooter className="flex justify-center">

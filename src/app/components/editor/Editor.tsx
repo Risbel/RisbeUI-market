@@ -254,6 +254,7 @@ const TipTapEditor = () => {
         class: "focus:outline-none min-w-full min-h-[150px] prose prose-sm sm:prose-base",
       },
     },
+    immediatelyRender: false,
   });
 
   return (
