@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Color } from "@tiptap/extension-color";
-import { Editor, EditorContent, useEditor } from "@tiptap/react";
+import { Editor, EditorContent, JSONContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
@@ -22,12 +22,10 @@ import {
   LucideHighlighter,
   QuoteIcon,
   AlignCenter,
-  StepBack,
   StrikethroughIcon,
   Undo,
   AlignLeft,
-  ParkingSquare,
-  ALargeSmallIcon,
+  LucideRectangleEllipsis,
 } from "lucide-react";
 import React from "react";
 import { Input } from "@/components/ui/input";
@@ -117,7 +115,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         disabled={!editor.can().chain().focus().toggleCode().run()}
         variant={editor.isActive("code") ? "default" : "secondary"}
       >
-        <Code2Icon className="size-4" />
+        <LucideRectangleEllipsis className="size-4 fill-gray-500" />
       </Button>
       <Button
         type="button"
@@ -245,16 +243,19 @@ const extensions = [
     nested: true,
   }),
 ];
-const TipTapEditor = () => {
+const TipTapEditor = ({ setJson, json }: { setJson: any; json: JSONContent | null }) => {
   const editor = useEditor({
     extensions: extensions,
-    content: "<p> Hello World. </p>",
+    content: json,
     editorProps: {
       attributes: {
-        class: "focus:outline-none min-w-full min-h-[150px] prose prose-sm sm:prose-base",
+        class: "focus:outline-none min-w-full min-h-[150px] prose prose-sm sm:prose-base space-y-4",
       },
     },
     immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      setJson(editor.getJSON());
+    },
   });
 
   return (

@@ -1,17 +1,49 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SelectCategory from "./components/SelectCategory";
 import { Textarea } from "@/components/ui/textarea";
 import TipTapEditor from "../components/editor/Editor";
 import { UploadDropzone } from "../lib/uploadthing";
+import { JSONContent } from "@tiptap/react";
+import { useFormState, useFormStatus } from "react-dom";
+import { SellProduct, State } from "@/server/actions/product";
+import { Loader2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { redirect } from "next/navigation";
 
 const Sell = () => {
+  const initialState: State = { message: "", satus: undefined };
+  const { pending } = useFormStatus();
+  const [state, formAction] = useFormState(SellProduct, initialState);
+  const [json, setJson] = useState<null | JSONContent>(null);
+  const [images, setImages] = useState<null | string[]>(null);
+  const [productFile, setProductFile] = useState<null | string>(null);
+
+  useEffect(() => {
+    if (state.satus === "success") {
+      toast({
+        variant: "default",
+        title: "Successful",
+        description: "The Product was created successfully!",
+      });
+      redirect("/");
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Erros",
+        description: `There was an error! ${state.message}`,
+      });
+    }
+  }, [state]);
+
   return (
     <section className="max-w-7xl mx-auto px-4 md:px-8">
-      <form action="">
+      <form action={formAction}>
         <Card>
           <CardHeader>
             <CardTitle>Sell your product with easy</CardTitle>
@@ -20,35 +52,92 @@ const Sell = () => {
           <CardContent className="flex flex-col gap-y-3 lg:gap-y-5">
             <div className="flex flex-col gap-y-2">
               <Label>Name</Label>
-              <Input type="text" placeholder="Name of the product" />
+              <Input minLength={3} name="name" type="text" placeholder="Name of the product" />
+              {state?.errors?.["name"]?.[0] && <p className="text-destructive">{state.errors?.["name"]?.[0]}</p>}
             </div>
             <div className="flex flex-col gap-y-2">
               <Label>Category</Label>
               <SelectCategory />
+              {state?.errors?.["category"]?.[0] && (
+                <p className="text-destructive">{state.errors?.["category"]?.[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-y-2">
               <Label>Price</Label>
-              <Input placeholder="$29" type="number" />
+              <Input min={0} name="price" placeholder="$29" type="number" />
+              {state?.errors?.["price"]?.[0] && <p className="text-destructive">{state.errors?.["price"]?.[0]}</p>}
             </div>
             <div className="flex flex-col gap-y-2">
               <Label>Small Sumary</Label>
-              <Textarea placeholder="Please describe your product shortly right here..." />
+              <Textarea
+                required
+                name="smallDescription"
+                minLength={10}
+                placeholder="Please describe your product shortly right here..."
+              />
+              {state?.errors?.["smallDescription"]?.[0] && (
+                <p className="text-destructive">{state.errors?.["smallDescription"]?.[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-y-2">
+              <input type="hidden" name="description" value={JSON.stringify(json)} />
               <Label>Description</Label>
-              <TipTapEditor />
+              <TipTapEditor json={json} setJson={setJson} />
+              {state?.errors?.["description"]?.[0] && (
+                <p className="text-destructive">{state.errors?.["description"]?.[0]}</p>
+              )}
             </div>
-            <div className="flex flex-col gap-y-2">
-              <Label>Product Images</Label>
-              <UploadDropzone endpoint="imageUploader" />
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <Label>Product File</Label>
-              <UploadDropzone endpoint="productFileUpload" />
+            <div className="flex flex-col md:flex-row gap-4 justify-between">
+              <div className="flex-1 flex flex-col gap-y-2">
+                <input type="hidden" name="images" value={JSON.stringify(images)} />
+                <Label>Product Images</Label>
+                <UploadDropzone
+                  endpoint="imageUploader"
+                  disabled={images ? true : false}
+                  onClientUploadComplete={(res) => {
+                    setImages(res.map((item) => item.url));
+                    toast({
+                      variant: "default",
+                      description: "Your images have been uploaded",
+                    });
+                  }}
+                  onUploadError={(error) => {
+                    toast({
+                      variant: "destructive",
+                      description: `${state.message}`,
+                    });
+                  }}
+                />
+                {state?.errors?.["images"]?.[0] && <p className="text-destructive">{state.errors?.["images"]?.[0]}</p>}
+              </div>
+              <div className="flex-1 flex flex-col gap-y-2">
+                <input type="hidden" name="productFile" value={JSON.stringify(productFile ?? "")} />
+                <Label>Product File</Label>
+                <UploadDropzone
+                  endpoint="productFileUpload"
+                  disabled={productFile ? true : false}
+                  onClientUploadComplete={(res) => {
+                    setProductFile(res[0].url);
+                    toast({
+                      variant: "default",
+                      description: "Your Product File have been uploaded",
+                    });
+                  }}
+                  onUploadError={(error) => {
+                    toast({
+                      variant: "destructive",
+                      description: `${state.message}`,
+                    });
+                  }}
+                />
+                {state?.errors?.["productFile"]?.[0] && (
+                  <p className="text-destructive">{state.errors?.["productFile"]?.[0]}</p>
+                )}
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex justify-center">
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Submit {pending && <Loader2 className="animate-spin" />}</Button>
           </CardFooter>
         </Card>
       </form>

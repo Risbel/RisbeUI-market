@@ -25,12 +25,8 @@ const Navbar = async () => {
           <UserDropDown user={user} />
         ) : (
           <>
-            <LoginLink postLoginRedirectURL="/" className={buttonVariants({ variant: "default" })}>
-              Signin
-            </LoginLink>
-            <RegisterLink postLoginRedirectURL="/" className={buttonVariants({ variant: "outline" })}>
-              Signup
-            </RegisterLink>
+            <LoginLink className={buttonVariants({ variant: "default" })}>Signin</LoginLink>
+            <RegisterLink className={buttonVariants({ variant: "outline" })}>Signup</RegisterLink>
           </>
         )}
 

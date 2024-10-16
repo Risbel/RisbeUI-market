@@ -26,7 +26,7 @@ model Product {
   price            Int
   smallDescription String
   description      Json
-  Images           String[]
+  images           String[]
   productFile      String
   category         CAtegoryTypes
 
