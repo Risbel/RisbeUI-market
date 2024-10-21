@@ -11,13 +11,14 @@ import TipTapEditor from "../components/editor/Editor";
 import { UploadDropzone } from "../lib/uploadthing";
 import { JSONContent } from "@tiptap/react";
 import { useFormState, useFormStatus } from "react-dom";
-import { SellProduct, State } from "@/server/actions/product";
+import { SellProduct } from "@/server/actions/product";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { redirect } from "next/navigation";
+import { State } from "@/types/state";
 
 const Sell = () => {
-  const initialState: State = { message: "", satus: undefined };
+  const initialState: State = { message: "", status: undefined };
   const { pending } = useFormStatus();
   const [state, formAction] = useFormState(SellProduct, initialState);
   const [json, setJson] = useState<null | JSONContent>(null);
@@ -25,14 +26,14 @@ const Sell = () => {
   const [productFile, setProductFile] = useState<null | string>(null);
 
   useEffect(() => {
-    if (state.satus === "success") {
+    if (state.status === "success") {
       toast({
         variant: "default",
         title: "Successful",
         description: "The Product was created successfully!",
       });
       redirect("/");
-    } else {
+    } else if (state.status === "error") {
       toast({
         variant: "destructive",
         title: "Erros",

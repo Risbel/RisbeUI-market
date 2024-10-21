@@ -27,6 +27,9 @@ const UserDropDown = ({ user }: { user: KindeUser<Record<string, any>> }) => {
         <DropdownMenuItem asChild>
           <Link href={"/sell"}>Sell</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={"/settings"}>Settings</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>

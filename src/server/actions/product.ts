@@ -1,16 +1,9 @@
 "use server";
 import prisma from "@/app/lib/db";
+import { State } from "@/types/state";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { CAtegoryTypes } from "@prisma/client";
 import { z } from "zod";
-
-export type State = {
-  satus: "error" | "success" | undefined;
-  errors?: {
-    [key: string]: string[];
-  };
-  message?: string | null;
-};
 
 const productSchema = z.object({
   name: z.string().min(3, { message: "The name have to be a min character length of 5" }),
@@ -42,7 +35,7 @@ export async function SellProduct(prevState: any, formData: FormData) {
 
   if (!validateFields.success) {
     const state: State = {
-      satus: "error",
+      status: "error",
       errors: validateFields.error.flatten().fieldErrors,
       message: "Oops, I think there is a mistake with your inputs.",
     };
@@ -64,7 +57,7 @@ export async function SellProduct(prevState: any, formData: FormData) {
   });
 
   const state: State = {
-    satus: "success",
+    status: "success",
     message: "Your Product has been created.",
   };
 
