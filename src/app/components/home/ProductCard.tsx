@@ -16,9 +16,9 @@ const ProductCard = ({ images, name, price, smallDescription, id }: iAppProps) =
     <div className="rounded-lg">
       <Carousel className="w-full mx-auto">
         <CarouselContent>
-          {images.map((image) => {
+          {images.map((image, index) => {
             return (
-              <CarouselItem>
+              <CarouselItem key={index}>
                 <div className="relative h-[230px]">
                   <Image alt="product image" src={image} fill className="object-cover w-full h-full rounded-lg" />
                 </div>
