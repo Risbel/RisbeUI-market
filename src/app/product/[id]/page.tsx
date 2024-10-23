@@ -77,7 +77,7 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="w-full max-x-2xl mx-auto mt-6 lg:mt-0 lg:col-span-7">
+      <div className="w-full max-x-2xl mx-auto mt-6 lg:mt-0 lg:col-span-7 pb-16 px-8 lg:px-0">
         <ProductDescription content={data?.description as JSONContent} />
       </div>
     </section>

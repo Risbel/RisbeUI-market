@@ -214,7 +214,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   );
 };
 
-const extensions = [
+export const extensions = [
   StarterKit.configure({
     bulletList: {
       keepMarks: true,
