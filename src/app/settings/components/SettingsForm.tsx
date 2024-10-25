@@ -43,11 +43,11 @@ const SettingsForm = ({ name, email }: iAppProps) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <Label>First Name</Label>
+          <Label className="pl-2">Name</Label>
           <Input name="name" type="text" defaultValue={name} />
         </div>
         <div className="flex flex-col gap-2">
-          <Label>Email</Label>
+          <Label className="pl-2">Email</Label>
           <Input name="email" type="email" disabled defaultValue={email} />
         </div>
       </CardContent>

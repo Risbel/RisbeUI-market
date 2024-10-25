@@ -12,17 +12,17 @@ export const navbarLinks = [
   {
     id: 1,
     name: "Templates",
-    href: "#",
+    href: "/products/template",
   },
   {
     id: 2,
     name: "Ui Kits",
-    href: "#",
+    href: "/products/uikit",
   },
   {
     id: 3,
     name: "Icons",
-    href: "#",
+    href: "/products/icon",
   },
 ];
 
@@ -34,7 +34,7 @@ const NavbarLinks = () => {
       {navbarLinks.map((link) => {
         return (
           <Link
-            className={cn("text-sm", location === link.href ? "font-semibold" : "text-gray-400")}
+            className={cn("text-sm", location === link.href ? "font-bold" : "text-gray-600")}
             key={link.id}
             href={link.href}
           >

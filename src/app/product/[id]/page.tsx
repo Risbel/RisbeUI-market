@@ -58,7 +58,7 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
         <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{data?.name}</h1>
         <p className="mt-6 text-muted-foreground">{data?.smallDescription}</p>
         <Button size={"lg"} className="w-full mt-10">
-          Buy for {data?.price}
+          Buy for ${data?.price}
         </Button>
 
         <div className="border-t border-gray-200 mt-10 pt-10">

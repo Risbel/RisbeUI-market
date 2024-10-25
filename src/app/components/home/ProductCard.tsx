@@ -31,7 +31,7 @@ const ProductCard = ({ images, name, price, smallDescription, id }: iAppProps) =
       </Carousel>
 
       <div className="flex justify-between items-center mt-2">
-        <h1>{name}</h1>
+        <h1 className="font-semibold">{name}</h1>
         <h3>${price}</h3>
       </div>
       <p className="text-gray-600 line-clamp-2">{smallDescription}</p>

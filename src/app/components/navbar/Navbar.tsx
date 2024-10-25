@@ -11,7 +11,7 @@ const Navbar = async () => {
   const user = await getUser();
 
   return (
-    <div className="relative max-w-7xl w-full flex justify-between md:grid md:grid-cols-12 items-center px-4 mx-auto py-4 md:py-7">
+    <div className="fixed z-50 backdrop-blur-md w-screen border-b flex justify-between md:grid md:grid-cols-12 items-center px-4 sm:px-16 lg:px-32 mx-auto py-4">
       <div className="md:col-span-3">
         <Link href="/">
           <h1 className="text-2xl font-bold">

@@ -15,7 +15,7 @@ import Link from "next/link";
 const UserDropDown = ({ user }: { user: KindeUser<Record<string, any>> }) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="outline-none select-none">
+      <DropdownMenuTrigger className="outline-none select-none border-4 border-primary rounded-full">
         <AvatarTrigger />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-40">
