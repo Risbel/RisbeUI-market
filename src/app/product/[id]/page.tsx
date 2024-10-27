@@ -1,9 +1,10 @@
 import prisma from "@/app/lib/db";
-import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Image from "next/image";
 import ProductDescription from "./components/ProductDescription";
 import { type JSONContent } from "@tiptap/react";
+import { BuyProduct } from "@/server/actions/stripe";
+import BuyButton from "@/app/components/buttons/BuyButton";
 
 async function getData(id: string) {
   const data = await prisma.product.findUnique({
@@ -11,6 +12,7 @@ async function getData(id: string) {
       id: id,
     },
     select: {
+      id: true,
       category: true,
       description: true,
       smallDescription: true,
@@ -34,7 +36,7 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
   const data = await getData(params.id);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 lg:px-8 lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10">
+    <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10">
       <Carousel className="lg:row-end-1 lg:col-span-4">
         <CarouselContent>
           {data?.images.map((item, index) => (
@@ -57,9 +59,11 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
       <div className="max-w-2xl mx-auto mt-5 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-3">
         <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{data?.name}</h1>
         <p className="mt-6 text-muted-foreground">{data?.smallDescription}</p>
-        <Button size={"lg"} className="w-full mt-10">
-          Buy for ${data?.price}
-        </Button>
+
+        <form action={BuyProduct}>
+          <input type="hidden" name="id" value={data?.id} />
+          <BuyButton price={data?.price as number} />
+        </form>
 
         <div className="border-t border-gray-200 mt-10 pt-10">
           <div className="grid grid-cols-2 w-full gap-y-3">
@@ -80,7 +84,7 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
       <div className="w-full max-x-2xl mx-auto mt-6 lg:mt-0 lg:col-span-7 pb-16 px-8 lg:px-0">
         <ProductDescription content={data?.description as JSONContent} />
       </div>
-    </section>
+    </div>
   );
 };
 

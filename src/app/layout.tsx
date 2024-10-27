@@ -34,7 +34,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navbar />
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <div className="h-screen pt-28">{children}</div>
+        <div className="h-screen pt-20">{children}</div>
         <Toaster />
       </body>
     </html>
