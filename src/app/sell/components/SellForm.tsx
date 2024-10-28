@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { useFormState, useFormStatus } from "react-dom";
 import { type State } from "@/types/state";
 import { SellProduct } from "@/server/actions/product";
@@ -32,7 +31,6 @@ const SellForm = () => {
         title: "Successful",
         description: "The Product was created successfully!",
       });
-      redirect("/");
     } else if (state.status === "error") {
       toast({
         variant: "destructive",

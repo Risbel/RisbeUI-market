@@ -3,6 +3,7 @@ import prisma from "@/app/lib/db";
 import { State } from "@/types/state";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { CAtegoryTypes } from "@prisma/client";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const productSchema = z.object({
@@ -43,7 +44,7 @@ export async function SellProduct(prevState: any, formData: FormData) {
     return state;
   }
 
-  await prisma.product.create({
+  const data = await prisma.product.create({
     data: {
       name: validateFields.data.name,
       category: validateFields.data.category as CAtegoryTypes,
@@ -56,10 +57,5 @@ export async function SellProduct(prevState: any, formData: FormData) {
     },
   });
 
-  const state: State = {
-    status: "success",
-    message: "Your Product has been created.",
-  };
-
-  return state;
+  return redirect(`/products/${data.id}`);
 }

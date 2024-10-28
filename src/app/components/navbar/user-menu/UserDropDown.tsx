@@ -33,7 +33,9 @@ const UserDropDown = ({ user }: { user: KindeUser<Record<string, any>> }) => {
         <DropdownMenuItem asChild>
           <Link href={"/my-products"}>My products</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={"/billing"}>Billing</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>
           <LogoutLink className="flex gap-2 w-full items-center font-semibold hover:bg-secondary p-1">
             Logout <LogOut height={15} width={15} />
