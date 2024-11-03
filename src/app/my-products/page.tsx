@@ -1,8 +1,9 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "../lib/db";
 import ProductCard from "../components/home/ProductCard";
+import { redirect } from "next/navigation";
 
-export const getData = async (userId: string) => {
+const getData = async (userId: string) => {
   const data = await prisma.product.findMany({
     where: {
       userId: userId,
@@ -24,7 +25,8 @@ const MyProducts = async () => {
   const user = await getUser();
 
   if (!user) {
-    throw new Error("Unauthorized");
+    redirect("/login");
+    return null;
   }
 
   const data = await getData(user.id);

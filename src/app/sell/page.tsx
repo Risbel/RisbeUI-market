@@ -26,7 +26,8 @@ const Sell = async () => {
   const user = await getUser();
 
   if (!user) {
-    throw new Error("Unauthorized");
+    redirect("/login");
+    return null;
   }
 
   const data = await getData(user.id);

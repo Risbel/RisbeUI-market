@@ -4,6 +4,7 @@ import prisma from "../lib/db";
 import { Button } from "@/components/ui/button";
 import { CreateStripeAccount, DeleteStripeAccount, GetStripeDashboardLink } from "@/server/actions/stripe";
 import SubmitButton from "../components/buttons/SubmitButton";
+import { redirect } from "next/navigation";
 
 const getData = async (userId: string) => {
   const data = prisma.user.findUnique({
@@ -23,7 +24,8 @@ const BillingRoute = async () => {
   const user = await getUser();
 
   if (!user) {
-    throw new Error("Unauthorized");
+    redirect("/login"); // Redirige al usuario no autenticado
+    return null;
   }
 
   const data = await getData(user.id);

@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "../lib/db";
 import SettingsForm from "./components/SettingsForm";
+import { redirect } from "next/navigation";
 
 async function getData(userId: string) {
   const data = await prisma.user.findUnique({
@@ -21,7 +22,8 @@ const SettingsPage = async () => {
   const user = await getUser();
 
   if (!user) {
-    throw new Error("Not Authorized");
+    redirect("/login"); // Redirige al usuario no autenticado
+    return null;
   }
 
   const data = await getData(user.id);

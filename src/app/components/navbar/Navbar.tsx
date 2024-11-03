@@ -11,9 +11,10 @@ const Navbar = async () => {
   const user = await getUser();
 
   return (
-    <div className="fixed z-50 backdrop-blur-md w-screen border-b flex justify-between md:grid md:grid-cols-12 items-center px-4 sm:px-16 lg:px-32 mx-auto py-4">
+    <div className="fixed z-50 backdrop-blur-md w-screen border-b flex justify-between md:grid md:grid-cols-12 items-center px-4 sm:px-16 lg:px-32 mx-auto py-2">
       <div className="md:col-span-3">
-        <Link href="/">
+        <Link href="/" className="flex gap-2 items-center">
+          <img src={"/icons8-tailwind-css-64.png"} alt="Logo image" className="object-cover w-10 h-10" />
           <h1 className="text-2xl font-bold">
             Risbe<span className="text-primary">UI</span>
           </h1>
