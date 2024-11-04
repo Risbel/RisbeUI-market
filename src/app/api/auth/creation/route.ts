@@ -1,11 +1,11 @@
-export const dynamic = "force-dynamic";
-
 import prisma from "@/app/lib/db";
 import { stripe } from "@/lib/stripe";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { unstable_noStore as noStore } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  noStore();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -48,5 +48,7 @@ export async function GET() {
     });
   }
 
-  return NextResponse.redirect("http://localhost:3000");
+  return NextResponse.redirect(
+    process.env.NODE_ENV === "development" ? "http://localhost:3000" : (process.env.KINDE_SITE_URL as string)
+  );
 }

@@ -1,6 +1,7 @@
 import ProductCard from "@/app/components/home/ProductCard";
 import prisma from "@/app/lib/db";
 import { CAtegoryTypes } from "@prisma/client";
+import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
 async function getData(category: string) {
@@ -45,6 +46,7 @@ async function getData(category: string) {
 }
 
 const CategoryPage = async ({ params }: { params: { category: string } }) => {
+  noStore();
   const data = await getData(params.category);
   return (
     <section className="max-w-7xl mx-auto px-4 md:px-8">

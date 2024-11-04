@@ -2,6 +2,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "../lib/db";
 import ProductCard from "../components/home/ProductCard";
 import { redirect } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 const getData = async (userId: string) => {
   const data = await prisma.product.findMany({
@@ -21,6 +22,7 @@ const getData = async (userId: string) => {
 };
 
 const MyProducts = async () => {
+  noStore();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
