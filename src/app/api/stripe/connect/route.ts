@@ -10,7 +10,7 @@ export const POST = async (req: Request) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.SRIPE_CONNECT_WEBHOOK_SECRET as string);
+    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_CONNECT_WEBHOOK_SECRET as string);
   } catch (error: unknown) {
     return new Response("webhook error", { status: 400 });
   }
