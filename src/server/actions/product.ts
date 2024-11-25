@@ -59,3 +59,38 @@ export async function SellProduct(prevState: any, formData: FormData) {
 
   return redirect(`/products/${data.id}`);
 }
+
+export async function DeleteProduct(productId: string) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    // Verifica si el producto pertenece al usuario
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!product || product.userId !== user.id) {
+      throw new Error("Product not found or you do not have permission to delete it.");
+    }
+
+    // Elimina el producto
+    await prisma.product.delete({
+      where: { id: productId },
+    });
+
+    return {
+      status: "success",
+      message: "Product deleted successfuly",
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      message: "The product could not be deleted",
+    };
+  }
+}

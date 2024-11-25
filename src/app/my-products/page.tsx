@@ -3,6 +3,7 @@ import prisma from "../lib/db";
 import ProductCard from "../components/home/ProductCard";
 import { redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
+import DeleteProductButton from "./componets/DeleteProductButton";
 
 const getData = async (userId: string) => {
   const data = await prisma.product.findMany({
@@ -38,14 +39,16 @@ const MyProducts = async () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-4">
         {data.map((item) => {
           return (
-            <ProductCard
-              key={item.id}
-              id={item.id}
-              images={item.images}
-              name={item.name}
-              price={item.price}
-              smallDescription={item.smallDescription}
-            />
+            <div key={item.id} className="flex flex-col gap-2">
+              <ProductCard
+                id={item.id}
+                images={item.images}
+                name={item.name}
+                price={item.price}
+                smallDescription={item.smallDescription}
+              />
+              <DeleteProductButton id={item.id} />
+            </div>
           );
         })}
       </div>
