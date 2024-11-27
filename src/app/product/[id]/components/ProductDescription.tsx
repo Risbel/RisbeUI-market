@@ -11,7 +11,7 @@ const ProductDescription = ({ content }: { content: JSONContent }) => {
     content: content,
     editorProps: {
       attributes: {
-        class: "w-full prose prose-sm sm:prose-base",
+        class: "w-full",
       },
     },
   });

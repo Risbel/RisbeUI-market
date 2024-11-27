@@ -5,9 +5,13 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 
-const SelectCategory = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
+const SelectCategory = ({
+  selectedCategory,
+  setSelectedCategory,
+}: {
+  selectedCategory: any;
+  setSelectedCategory: any;
+}) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
       <input type="hidden" name="category" value={selectedCategory || ""} />

@@ -57,7 +57,7 @@ export async function SellProduct(prevState: any, formData: FormData) {
     },
   });
 
-  return redirect(`/products/${data.id}`);
+  return redirect(`/product/${data.id}`);
 }
 
 export async function DeleteProduct(productId: string) {

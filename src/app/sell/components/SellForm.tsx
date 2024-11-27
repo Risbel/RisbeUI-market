@@ -15,14 +15,18 @@ import { useFormState, useFormStatus } from "react-dom";
 import { type State } from "@/types/state";
 import { SellProduct } from "@/server/actions/product";
 import { type JSONContent } from "@tiptap/react";
+import CodeInput from "./CodeInput";
+import { cn } from "@/lib/utils";
 
 const SellForm = () => {
   const initialState: State = { message: "", status: undefined };
-  const { pending } = useFormStatus();
+  const { pending, data } = useFormStatus();
   const [state, formAction] = useFormState(SellProduct, initialState);
   const [json, setJson] = useState<null | JSONContent>(null);
   const [images, setImages] = useState<null | string[]>(null);
   const [productFile, setProductFile] = useState<null | string>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -55,7 +59,7 @@ const SellForm = () => {
           </div>
           <div className="flex flex-col gap-y-2">
             <Label>Category</Label>
-            <SelectCategory />
+            <SelectCategory selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
             {state?.errors?.["category"]?.[0] && <p className="text-destructive">{state.errors?.["category"]?.[0]}</p>}
           </div>
           <div className="flex flex-col gap-y-2">
@@ -83,6 +87,10 @@ const SellForm = () => {
               <p className="text-destructive">{state.errors?.["description"]?.[0]}</p>
             )}
           </div>
+          <div className={cn(selectedCategory !== "template" && "hidden")}>
+            <Label>Code</Label>
+            <CodeInput />
+          </div>
           <div className="flex flex-col md:flex-row gap-4 justify-between">
             <div className="flex-1 flex flex-col gap-y-2">
               <input type="hidden" name="images" value={JSON.stringify(images)} />
@@ -106,6 +114,7 @@ const SellForm = () => {
               />
               {state?.errors?.["images"]?.[0] && <p className="text-destructive">{state.errors?.["images"]?.[0]}</p>}
             </div>
+
             <div className="flex-1 flex flex-col gap-y-2">
               <input type="hidden" name="productFile" value={JSON.stringify(productFile ?? "")} />
               <Label>Product File</Label>

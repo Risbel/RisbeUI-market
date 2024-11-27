@@ -6,6 +6,7 @@ import { type JSONContent } from "@tiptap/react";
 import { BuyProduct } from "@/server/actions/stripe";
 import BuyButton from "@/app/components/buttons/BuyButton";
 import { unstable_noStore as noStore } from "next/cache";
+import { CodePreview } from "./components/CodePreview";
 
 async function getData(id: string) {
   const data = await prisma.product.findUnique({
@@ -36,6 +37,33 @@ async function getData(id: string) {
 const ProductPage = async ({ params }: { params: { id: string } }) => {
   noStore();
   const data = await getData(params.id);
+  const productCode = `
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+
+interface ProductDisplayProps {
+  name: string
+  description: string
+  price: number
+  category: string
+}
+
+export function ProductDisplay({ name, description, price, category }: ProductDisplayProps) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{name}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex justify-between items-center">
+          <span className="text-2xl font-bold">$2</span>
+          <Badge>{category}</Badge>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10">
@@ -83,9 +111,11 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="w-full max-x-2xl mx-auto mt-6 lg:mt-0 lg:col-span-7 pb-16 px-8 lg:px-0">
+      <div className="w-full max-x-2xl mx-auto mt-6 lg:mt-0 lg:col-span-7 pb-16 px-2 lg:px-0">
         <ProductDescription content={data?.description as JSONContent} />
       </div>
+
+      <CodePreview jsx={productCode} />
     </div>
   );
 };
