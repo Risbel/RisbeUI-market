@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import SelectCategory from "./SelectCategory";
 import { Textarea } from "@/components/ui/textarea";
 import TipTapEditor from "@/app/components/editor/Editor";
-import { UploadDropzone } from "@/app/lib/uploadthing";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2Icon, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
@@ -17,13 +16,16 @@ import { SellProduct } from "@/server/actions/product";
 import { type JSONContent } from "@tiptap/react";
 import CodeInput from "./CodeInput";
 import ButtonUploadCode from "./ButtonUploadCode";
+import CustomDropZone from "./CustomDropZone";
 
 const SellForm = () => {
   const initialState: State = { message: "", status: undefined };
   const { pending, data } = useFormStatus();
   const [state, formAction] = useFormState(SellProduct, initialState);
   const [json, setJson] = useState<null | JSONContent>(null);
-  const [images, setImages] = useState<null | string[]>(null);
+
+  const [uploadedImagesUrls, setUploadedImagesUrls] = useState<string[]>([]);
+
   const [code, setCode] = useState("");
   const [uploadedCodeUrl, setUploadedCodeUrl] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -107,34 +109,27 @@ const SellForm = () => {
               </div>
             )}
           </div>
+
           <div className="flex flex-col md:flex-row gap-4 justify-between">
             <div className="flex-1 flex flex-col gap-y-2">
-              <input type="hidden" name="images" value={JSON.stringify(images)} />
+              <input type="hidden" name="images" value={JSON.stringify(uploadedImagesUrls)} />
               <Label>Product Images</Label>
-              <UploadDropzone
-                endpoint="imageUploader"
-                disabled={images ? true : false}
-                onClientUploadComplete={(res) => {
-                  setImages(res.map((item) => item.url));
-                  toast({
-                    variant: "default",
-                    description: "Your images have been uploaded",
-                  });
-                }}
-                onUploadError={(error) => {
-                  toast({
-                    variant: "destructive",
-                    description: `${state.message}`,
-                  });
-                }}
-              />
+              {!uploadedImagesUrls?.length ? (
+                <CustomDropZone setUploadedImagesUrls={setUploadedImagesUrls} uploadedImagesUrls={uploadedImagesUrls} />
+              ) : (
+                <div className="flex items-center max-w-max font-medium text-green-900 gap-2 mt-2 px-4 py-2 bg-green-200 rounded-md">
+                  <p>Images uploaded successfuly</p>
+                  <CheckCircle2Icon />
+                </div>
+              )}
+
               {state?.errors?.["images"]?.[0] && <p className="text-destructive">{state.errors?.["images"]?.[0]}</p>}
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button disabled={uploadedCodeUrl || images ? false : true} type="submit">
-            Submit {pending && <Loader2 className="animate-spin" />}
+          <Button disabled={uploadedCodeUrl && uploadedImagesUrls ? false : true} type="submit">
+            Create product {pending && <Loader2 className="animate-spin" />}
           </Button>
         </CardFooter>
       </Card>

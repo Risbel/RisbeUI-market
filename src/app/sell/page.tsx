@@ -32,7 +32,7 @@ const Sell = async () => {
     return null;
   }
 
-  const data = await getData(user.id);
+  await getData(user.id);
 
   return (
     <section className="max-w-7xl mx-auto px-4 md:px-8 pb-28">

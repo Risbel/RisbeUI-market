@@ -1,6 +1,5 @@
 import ProductCard from "@/app/components/home/ProductCard";
 import prisma from "@/app/lib/db";
-import { CAtegoryTypes } from "@prisma/client";
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
@@ -31,7 +30,7 @@ async function getData(category: string) {
 
   const data = prisma.product.findMany({
     where: {
-      category: input as CAtegoryTypes,
+      category: input,
     },
     select: {
       id: true,
