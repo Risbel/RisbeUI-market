@@ -1,8 +1,8 @@
 "use server";
+
 import prisma from "@/app/lib/db";
 import { State } from "@/types/state";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { CAtegoryTypes } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -13,7 +13,7 @@ const productSchema = z.object({
   smallDescription: z.string().min(10, { message: "Please summerize your product more" }),
   description: z.string().min(10, { message: "Description required" }),
   images: z.array(z.string(), { message: "Images are required" }),
-  productFile: z.string().min(10, { message: "Please upload a zip of your product" }),
+  code: z.string().min(1, { message: "Code required" }),
 });
 
 export async function SellProduct(prevState: any, formData: FormData) {
@@ -31,7 +31,7 @@ export async function SellProduct(prevState: any, formData: FormData) {
     smallDescription: formData.get("smallDescription"),
     description: formData.get("description"),
     images: JSON.parse(formData.get("images") as string),
-    productFile: formData.get("productFile"),
+    code: formData.get("code"),
   });
 
   if (!validateFields.success) {
@@ -47,12 +47,12 @@ export async function SellProduct(prevState: any, formData: FormData) {
   const data = await prisma.product.create({
     data: {
       name: validateFields.data.name,
-      category: validateFields.data.category as CAtegoryTypes,
+      category: validateFields.data.category,
       smallDescription: validateFields.data.smallDescription,
       description: JSON.parse(validateFields.data.description),
       price: validateFields.data.price,
       images: validateFields.data.images,
-      productFile: validateFields.data.productFile,
+      codeUrl: validateFields.data.code,
       userId: user.id,
     },
   });

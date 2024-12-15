@@ -1,4 +1,4 @@
-import { Flame, GlobeIcon, PartyPopper } from "lucide-react";
+import { ComponentIcon, LayoutTemplate, PackageIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 interface iAppProps {
@@ -12,23 +12,23 @@ interface iAppProps {
 export const categoryItems: iAppProps[] = [
   {
     id: 0,
-    name: "template",
-    title: "Template",
-    image: <GlobeIcon />,
+    name: "component",
+    title: "Component",
+    image: <ComponentIcon />,
     description: "",
   },
   {
     id: 1,
-    name: "uikit",
-    title: "Ui Kit",
-    image: <Flame />,
+    name: "template",
+    title: "Template",
+    image: <LayoutTemplate />,
     description: "",
   },
   {
     id: 2,
-    name: "icon",
-    title: "Icon",
-    image: <PartyPopper />,
+    name: "uikit",
+    title: "Ui Kit",
+    image: <PackageIcon />,
     description: "",
   },
 ];

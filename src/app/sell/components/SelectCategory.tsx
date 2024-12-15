@@ -23,7 +23,7 @@ const SelectCategory = ({
               onClick={() => setSelectedCategory(item.name)}
             >
               <CardHeader>{item.image}</CardHeader>
-              <CardContent>{item.name}</CardContent>
+              <CardContent>{item.title}</CardContent>
             </Card>
           </div>
         );

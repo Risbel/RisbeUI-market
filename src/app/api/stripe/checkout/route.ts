@@ -20,17 +20,11 @@ export const POST = async (req: Request) => {
 
   switch (event.type) {
     case "checkout.session.completed": {
-      const session = event.data.object;
-
-      const link = session.metadata?.link;
-
       const { data, error } = await resend.emails.send({
         from: "RisbeUI <onboarding@resend.dev>",
         to: ["risbel961019@gmail.com"],
         subject: "Your Product from RisbeUI",
-        react: ProductEmail({
-          link: link as string,
-        }),
+        react: ProductEmail(),
       });
 
       if (error) {

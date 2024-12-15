@@ -4,4 +4,5 @@ export type State = {
     [key: string]: string[];
   };
   message?: string | null;
+  data?: any;
 };

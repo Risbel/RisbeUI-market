@@ -28,7 +28,7 @@ export const ourFileRouter = {
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
     }),
-  productFileUpload: f({ blob: { maxFileCount: 1, maxFileSize: "128MB" } })
+  productFileUpload: f({ blob: { maxFileCount: 1, maxFileSize: "2MB" } })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
       const { getUser } = getKindeServerSession();

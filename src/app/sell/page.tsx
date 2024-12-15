@@ -35,7 +35,7 @@ const Sell = async () => {
   const data = await getData(user.id);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 md:px-8">
+    <section className="max-w-7xl mx-auto px-4 md:px-8 pb-28">
       <Card>
         <SellForm />
       </Card>

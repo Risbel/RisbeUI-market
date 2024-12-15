@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import TipTapEditor from "@/app/components/editor/Editor";
 import { UploadDropzone } from "@/app/lib/uploadthing";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { CheckCircle2Icon, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -16,7 +16,7 @@ import { type State } from "@/types/state";
 import { SellProduct } from "@/server/actions/product";
 import { type JSONContent } from "@tiptap/react";
 import CodeInput from "./CodeInput";
-import { cn } from "@/lib/utils";
+import ButtonUploadCode from "./ButtonUploadCode";
 
 const SellForm = () => {
   const initialState: State = { message: "", status: undefined };
@@ -24,8 +24,8 @@ const SellForm = () => {
   const [state, formAction] = useFormState(SellProduct, initialState);
   const [json, setJson] = useState<null | JSONContent>(null);
   const [images, setImages] = useState<null | string[]>(null);
-  const [productFile, setProductFile] = useState<null | string>(null);
-
+  const [code, setCode] = useState("");
+  const [uploadedCodeUrl, setUploadedCodeUrl] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const SellForm = () => {
 
   return (
     <form action={formAction}>
-      <Card>
+      <Card className="shadow-lg">
         <CardHeader>
           <CardTitle>Sell your product with easy</CardTitle>
           <CardDescription>Describe your product here in detail so that it can be sold</CardDescription>
@@ -87,9 +87,25 @@ const SellForm = () => {
               <p className="text-destructive">{state.errors?.["description"]?.[0]}</p>
             )}
           </div>
-          <div className={cn(selectedCategory !== "template" && "hidden")}>
-            <Label>Code</Label>
-            <CodeInput />
+          <div>
+            <input type="hidden" name="code" value={uploadedCodeUrl ?? ""} />
+            <Label htmlFor="code">Code</Label>
+            <CodeInput code={code} setCode={setCode} isDesabled={uploadedCodeUrl ? true : false} />
+
+            {!uploadedCodeUrl ? (
+              <div className="flex justify-center">
+                <ButtonUploadCode
+                  code={code}
+                  setUploadedCodeUrl={setUploadedCodeUrl}
+                  isDesabled={!code ? true : false}
+                />
+              </div>
+            ) : (
+              <div className="flex items-center max-w-max font-medium text-green-900 gap-2 mt-2 px-4 py-2 bg-green-200 rounded-md">
+                <p>Uploaded successfuly</p>
+                <CheckCircle2Icon />
+              </div>
+            )}
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-between">
             <div className="flex-1 flex flex-col gap-y-2">
@@ -114,35 +130,12 @@ const SellForm = () => {
               />
               {state?.errors?.["images"]?.[0] && <p className="text-destructive">{state.errors?.["images"]?.[0]}</p>}
             </div>
-
-            <div className="flex-1 flex flex-col gap-y-2">
-              <input type="hidden" name="productFile" value={JSON.stringify(productFile ?? "")} />
-              <Label>Product File</Label>
-              <UploadDropzone
-                endpoint="productFileUpload"
-                disabled={productFile ? true : false}
-                onClientUploadComplete={(res) => {
-                  setProductFile(res[0].url);
-                  toast({
-                    variant: "default",
-                    description: "Your Product File have been uploaded",
-                  });
-                }}
-                onUploadError={(error) => {
-                  toast({
-                    variant: "destructive",
-                    description: `${state.message}`,
-                  });
-                }}
-              />
-              {state?.errors?.["productFile"]?.[0] && (
-                <p className="text-destructive">{state.errors?.["productFile"]?.[0]}</p>
-              )}
-            </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button type="submit">Submit {pending && <Loader2 className="animate-spin" />}</Button>
+          <Button disabled={uploadedCodeUrl || images ? false : true} type="submit">
+            Submit {pending && <Loader2 className="animate-spin" />}
+          </Button>
         </CardFooter>
       </Card>
     </form>
