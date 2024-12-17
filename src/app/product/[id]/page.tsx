@@ -8,6 +8,23 @@ import BuyButton from "@/app/components/buttons/BuyButton";
 import { unstable_noStore as noStore } from "next/cache";
 import { CodePreview } from "./components/CodePreview";
 
+async function getCodeFromUrl(url: string | null) {
+  if (!url) return null;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(`Failed to fetch code from ${url}`);
+      return null;
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching code from ${url}:`, error);
+    return null;
+  }
+}
+
 async function getData(id: string) {
   const data = await prisma.product.findUnique({
     where: {
@@ -17,6 +34,7 @@ async function getData(id: string) {
       id: true,
       category: true,
       description: true,
+      codeUrl: true,
       smallDescription: true,
       name: true,
       images: true,
@@ -37,33 +55,8 @@ async function getData(id: string) {
 const ProductPage = async ({ params }: { params: { id: string } }) => {
   noStore();
   const data = await getData(params.id);
-  const productCode = `
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-
-interface ProductDisplayProps {
-  name: string
-  description: string
-  price: number
-  category: string
-}
-
-export function ProductDisplay({ name, description, price, category }: ProductDisplayProps) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{name}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold">$2</span>
-          <Badge>{category}</Badge>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}`;
+  const productCodeResponse = data ? await getCodeFromUrl(data?.codeUrl) : `/* No code **/`;
+  const productCode = `${productCodeResponse?.code}`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10">
@@ -110,7 +103,7 @@ export function ProductDisplay({ name, description, price, category }: ProductDi
         <ProductDescription content={data?.description as string} />
       </div>
 
-      <CodePreview jsx={productCode} />
+      {productCode && <CodePreview jsx={productCode} />}
     </div>
   );
 };
