@@ -72,12 +72,7 @@ export function ProductDisplay({ name, description, price, category }: ProductDi
           {data?.images.map((item, index) => (
             <CarouselItem key={index}>
               <div className="aspect-w-4 aspect-h-3 rounded-lg bg-gray-100 overflow-hidden">
-                <Image
-                  src={item as string}
-                  alt="Product image"
-                  fill
-                  className="object-cover w-full h-full rounded-lg"
-                />
+                <Image src={item as string} alt="Product image" fill className="object-contain rounded-lg" />
               </div>
             </CarouselItem>
           ))}
@@ -112,7 +107,7 @@ export function ProductDisplay({ name, description, price, category }: ProductDi
       </div>
 
       <div className="w-full max-x-2xl mx-auto mt-6 lg:mt-0 lg:col-span-7 pb-16 px-2 lg:px-0">
-        <ProductDescription content={data?.description as JSONContent} />
+        <ProductDescription content={data?.description as string} />
       </div>
 
       <CodePreview jsx={productCode} />

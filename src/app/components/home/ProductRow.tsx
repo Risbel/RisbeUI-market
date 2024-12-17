@@ -6,15 +6,15 @@ import { Suspense } from "react";
 import FallbackRow from "./FallbackRow";
 
 interface iAppProps {
-  category: "newest" | "templates" | "uikits" | "icons";
+  category: "newest" | "templates" | "uikits" | "components";
 }
 
 export const getData = async ({ category }: iAppProps) => {
   switch (category) {
-    case "icons": {
+    case "components": {
       const data = await prisma.product.findMany({
         where: {
-          category: "icon",
+          category: "component",
         },
         select: {
           price: true,
@@ -28,8 +28,8 @@ export const getData = async ({ category }: iAppProps) => {
 
       return {
         data: data,
-        title: "Icons",
-        link: "/products/icon",
+        title: "Components",
+        link: "/products/component",
       };
     }
     case "newest": {
@@ -123,7 +123,7 @@ export const LoadRows = async ({ category }: iAppProps) => {
           All Products <span>&rarr;</span>
         </Link>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-4 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-4 gap-6">
         {data.data.map((product) => {
           return (
             <ProductCard

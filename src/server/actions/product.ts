@@ -11,7 +11,15 @@ const productSchema = z.object({
   category: z.string().min(1, { message: "Category is required" }),
   price: z.number().min(0, { message: "Price can't be negative numbers" }),
   smallDescription: z.string().min(10, { message: "Please summerize your product more" }),
-  description: z.string().min(10, { message: "Description required" }),
+  description: z.string().min(10, { message: "Description required" }).optional().or(z.literal("")),
+  tags: z
+    .array(
+      z.object({
+        id: z.string().nonempty({ message: "Tag ID is required." }),
+        name: z.string().nonempty({ message: "Tag name is required." }),
+      })
+    )
+    .min(1, { message: "At least one tag is required." }),
   images: z.array(z.string(), { message: "Images are required" }),
   code: z.string().min(1, { message: "Code required" }),
 });
@@ -21,43 +29,73 @@ export async function SellProduct(prevState: any, formData: FormData) {
   const user = await getUser();
 
   if (!user) {
-    throw new Error("Something went wrong");
+    throw new Error("Unauthorized");
   }
 
-  const validateFields = productSchema.safeParse({
-    name: formData.get("name"),
-    category: formData.get("category"),
-    price: Number(formData.get("price")),
-    smallDescription: formData.get("smallDescription"),
-    description: formData.get("description"),
-    images: JSON.parse(formData.get("images") as string),
-    code: formData.get("code"),
-  });
+  try {
+    const validateFields = productSchema.safeParse({
+      name: formData.get("name"),
+      category: formData.get("category"),
+      price: Number(formData.get("price")),
+      smallDescription: formData.get("smallDescription"),
+      description: formData.get("description"),
+      tags: JSON.parse(formData.get("tags") as string), // Expecting an array of tag objects
+      images: JSON.parse(formData.get("images") as string),
+      code: formData.get("code") as string,
+    });
 
-  if (!validateFields.success) {
+    if (!validateFields.success) {
+      const state: State = {
+        status: "error",
+        errors: validateFields.error.flatten().fieldErrors,
+        message: "Oops, I think there is a mistake with your inputs.",
+      };
+
+      return state;
+    }
+
+    const validatedData = validateFields.data;
+
+    // Extract tag IDs
+    const tagConnections = validatedData.tags.map((tag: { id: string; name: string }) => ({
+      id: tag.id,
+    }));
+
+    // Create the product with associated tags
+    const data = await prisma.product.create({
+      data: {
+        name: validatedData.name,
+        category: validatedData.category,
+        smallDescription: validatedData.smallDescription || "",
+        description: validatedData.description,
+        price: validatedData.price,
+        images: validatedData.images,
+        codeUrl: validatedData.code,
+        userId: user.id,
+        Tags: {
+          connect: tagConnections, // Use `connect` with IDs
+        },
+      },
+    });
+
+    const state: State = {
+      status: "success",
+      message: "Product created successfuly",
+      data: data.id,
+    };
+
+    return state;
+  } catch (error) {
+    console.error("Error creating product:", error);
+
     const state: State = {
       status: "error",
-      errors: validateFields.error.flatten().fieldErrors,
-      message: "Oops, I think there is a mistake with your inputs.",
+      errors: { general: ["An unexpected error occurred. Please try again."] },
+      message: "Oops, something went wrong.",
     };
 
     return state;
   }
-
-  const data = await prisma.product.create({
-    data: {
-      name: validateFields.data.name,
-      category: validateFields.data.category,
-      smallDescription: validateFields.data.smallDescription,
-      description: JSON.parse(validateFields.data.description),
-      price: validateFields.data.price,
-      images: validateFields.data.images,
-      codeUrl: validateFields.data.code,
-      userId: user.id,
-    },
-  });
-
-  return redirect(`/product/${data.id}`);
 }
 
 export async function DeleteProduct(productId: string) {

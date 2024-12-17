@@ -15,8 +15,8 @@ async function getData(category: string) {
       input = "uikit";
       break;
     }
-    case "icon": {
-      input = "icon";
+    case "components": {
+      input = "component";
       break;
     }
     case "all": {

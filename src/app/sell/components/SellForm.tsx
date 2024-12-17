@@ -6,8 +6,7 @@ import { Label } from "@/components/ui/label";
 import SelectCategory from "./SelectCategory";
 import { Textarea } from "@/components/ui/textarea";
 import TipTapEditor from "@/app/components/editor/Editor";
-import { Button } from "@/components/ui/button";
-import { CheckCircle2Icon, Loader2 } from "lucide-react";
+import { CheckCircle2Icon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -17,18 +16,22 @@ import { type JSONContent } from "@tiptap/react";
 import CodeInput from "./CodeInput";
 import ButtonUploadCode from "./ButtonUploadCode";
 import CustomDropZone from "./CustomDropZone";
+import { Tag, TagsSelector } from "./TagsSelector";
+import { useRouter } from "next/navigation";
+import SubmitButton from "@/app/components/buttons/SubmitButton";
 
 const SellForm = () => {
+  const router = useRouter();
   const initialState: State = { message: "", status: undefined };
-  const { pending, data } = useFormStatus();
+
   const [state, formAction] = useFormState(SellProduct, initialState);
-  const [json, setJson] = useState<null | JSONContent>(null);
+  const [descriptionJson, setDescriptionJson] = useState<null | JSONContent>(null);
 
   const [uploadedImagesUrls, setUploadedImagesUrls] = useState<string[]>([]);
-
   const [code, setCode] = useState("");
   const [uploadedCodeUrl, setUploadedCodeUrl] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -37,6 +40,8 @@ const SellForm = () => {
         title: "Successful",
         description: "The Product was created successfully!",
       });
+
+      router.push(`/product/${state.data}`);
     } else if (state.status === "error") {
       toast({
         variant: "destructive",
@@ -55,8 +60,8 @@ const SellForm = () => {
         </CardHeader>
         <CardContent className="flex flex-col gap-y-3 lg:gap-y-5">
           <div className="flex flex-col gap-y-2">
-            <Label>Name</Label>
-            <Input minLength={3} name="name" type="text" placeholder="Name of the product" />
+            <Label htmlFor="name">Name</Label>
+            <Input required minLength={3} id="name" name="name" type="text" placeholder="Name of the product" />
             {state?.errors?.["name"]?.[0] && <p className="text-destructive">{state.errors?.["name"]?.[0]}</p>}
           </div>
           <div className="flex flex-col gap-y-2">
@@ -66,7 +71,7 @@ const SellForm = () => {
           </div>
           <div className="flex flex-col gap-y-2">
             <Label>Price</Label>
-            <Input min={0} name="price" placeholder="$29" type="number" />
+            <Input min={0} name="price" placeholder="Set price for your product." type="number" />
             {state?.errors?.["price"]?.[0] && <p className="text-destructive">{state.errors?.["price"]?.[0]}</p>}
           </div>
           <div className="flex flex-col gap-y-2">
@@ -82,12 +87,17 @@ const SellForm = () => {
             )}
           </div>
           <div className="flex flex-col gap-y-2">
-            <input type="hidden" name="description" value={JSON.stringify(json)} />
+            <input type="hidden" name="description" value={JSON.stringify(descriptionJson)} />
             <Label>Description</Label>
-            <TipTapEditor json={json} setJson={setJson} />
+            <TipTapEditor json={descriptionJson} setJson={setDescriptionJson} />
             {state?.errors?.["description"]?.[0] && (
               <p className="text-destructive">{state.errors?.["description"]?.[0]}</p>
             )}
+          </div>
+          <div>
+            <input type="hidden" name="tags" value={JSON.stringify(tags)} />
+            <Label>Tags</Label>
+            <TagsSelector tags={tags} setTags={setTags} />
           </div>
           <div>
             <input type="hidden" name="code" value={uploadedCodeUrl ?? ""} />
@@ -111,9 +121,9 @@ const SellForm = () => {
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 justify-between">
-            <div className="flex-1 flex flex-col gap-y-2">
-              <input type="hidden" name="images" value={JSON.stringify(uploadedImagesUrls)} />
-              <Label>Product Images</Label>
+            <div className="flex-1 flex flex-col gap-y-1">
+              <Label htmlFor="dropzone-file">Product Images</Label>
+              <input type="hidden" name="images" readOnly value={JSON.stringify(uploadedImagesUrls)} />
               {!uploadedImagesUrls?.length ? (
                 <CustomDropZone setUploadedImagesUrls={setUploadedImagesUrls} uploadedImagesUrls={uploadedImagesUrls} />
               ) : (
@@ -128,9 +138,11 @@ const SellForm = () => {
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button disabled={uploadedCodeUrl && uploadedImagesUrls ? false : true} type="submit">
-            Create product {pending && <Loader2 className="animate-spin" />}
-          </Button>
+          <SubmitButton
+            title="Create product"
+            loadingText="Creating product..."
+            isDisabled={!uploadedCodeUrl || uploadedImagesUrls.length === 0}
+          />
         </CardFooter>
       </Card>
     </form>

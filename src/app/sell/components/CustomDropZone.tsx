@@ -110,6 +110,7 @@ export default function CustomDropZone({
             </div>
             <input
               hidden
+              readOnly
               required
               disabled={isPending ? true : false}
               id="dropzone-file"

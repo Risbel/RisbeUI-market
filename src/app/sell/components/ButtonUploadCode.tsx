@@ -10,7 +10,7 @@ const ButtonUploadCode = ({
   isDesabled,
 }: {
   code: string;
-  setUploadedCodeUrl: React.SetStateAction<string | any>;
+  setUploadedCodeUrl: React.Dispatch<React.SetStateAction<string | null>>;
   isDesabled?: boolean;
 }) => {
   const [isPending, startTransition] = useTransition();
