@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     locale: "en",
     images: [
       {
-        url: "https://risbeui-market.vercel.app/RisbeUI-icon-og.webp",
+        url: "https://risbeui-market.vercel.app/Risbe-UI-marketplace-og.webp",
         height: 630,
         alt: "Risbe UI Icon",
       },
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Risbe UI",
     description: "Find, Buy, and Sell with ease Tailwind UI components.",
-    images: ["https://risbeui-market.vercel.app/RisbeUI-icon-og.webp"],
+    images: ["https://risbeui-market.vercel.app/Risbe-UI-marketplace-og.webp"],
   },
 };
 
