@@ -6,23 +6,23 @@ import { usePathname } from "next/navigation";
 export const navbarLinks = [
   {
     id: 0,
-    name: "Home",
-    href: "/",
+    name: "All",
+    href: "/products/all",
   },
   {
     id: 1,
+    name: "Components",
+    href: "/products/components",
+  },
+  {
+    id: 2,
     name: "Templates",
     href: "/products/template",
   },
   {
-    id: 2,
+    id: 3,
     name: "Ui Kits",
     href: "/products/uikit",
-  },
-  {
-    id: 3,
-    name: "Components",
-    href: "/products/components",
   },
 ];
 

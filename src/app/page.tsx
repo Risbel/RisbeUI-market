@@ -16,8 +16,8 @@ export default function Home() {
       </div>
 
       <ProductRow category="newest" />
-      <ProductRow category="templates" />
       <ProductRow category="components" />
+      <ProductRow category="templates" />
       <ProductRow category="uikits" />
     </section>
   );
