@@ -28,7 +28,7 @@ const MyProducts = async () => {
   const user = await getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/api/auth/login?");
     return null;
   }
 

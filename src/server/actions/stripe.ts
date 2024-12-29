@@ -6,6 +6,13 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
 export const BuyProduct = async (formData: FormData) => {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    redirect("/api/auth/login?");
+  }
+
   const id = formData.get("id") as string;
 
   const data = await prisma.product.findUnique({
@@ -47,6 +54,11 @@ export const BuyProduct = async (formData: FormData) => {
       transfer_data: {
         destination: data?.User?.connectedAccountId as string,
       },
+    },
+    metadata: {
+      userId: user.id,
+      email: user.email,
+      productId: data?.id as string,
     },
     success_url:
       process.env.NODE_ENV === "development"

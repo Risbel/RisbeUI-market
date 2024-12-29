@@ -12,6 +12,7 @@ const productSchema = z.object({
   price: z.number().min(0, { message: "Price can't be negative numbers" }),
   smallDescription: z.string().min(10, { message: "Please summerize your product more" }),
   description: z.string().min(10, { message: "Description required" }).optional().or(z.literal("")),
+  guide: z.string().min(10, { message: "Guide required" }).optional().or(z.literal("")),
   tags: z
     .array(
       z.object({
@@ -39,6 +40,7 @@ export async function SellProduct(prevState: any, formData: FormData) {
       price: Number(formData.get("price")),
       smallDescription: formData.get("smallDescription"),
       description: formData.get("description"),
+      guide: formData.get("guide"),
       tags: JSON.parse(formData.get("tags") as string), // Expecting an array of tag objects
       images: JSON.parse(formData.get("images") as string),
       code: formData.get("code") as string,
@@ -68,6 +70,7 @@ export async function SellProduct(prevState: any, formData: FormData) {
         category: validatedData.category,
         smallDescription: validatedData.smallDescription || "",
         description: validatedData.description,
+        guide: validatedData.guide,
         price: validatedData.price,
         images: validatedData.images,
         codeUrl: validatedData.code,

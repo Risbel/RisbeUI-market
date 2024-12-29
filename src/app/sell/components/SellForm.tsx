@@ -26,6 +26,7 @@ const SellForm = () => {
 
   const [state, formAction] = useFormState(SellProduct, initialState);
   const [descriptionJson, setDescriptionJson] = useState<null | JSONContent>(null);
+  const [guideJson, setGuideJson] = useState<null | JSONContent>(null);
 
   const [uploadedImagesUrls, setUploadedImagesUrls] = useState<string[]>([]);
   const [code, setCode] = useState("");
@@ -70,14 +71,15 @@ const SellForm = () => {
             {state?.errors?.["category"]?.[0] && <p className="text-destructive">{state.errors?.["category"]?.[0]}</p>}
           </div>
           <div className="flex flex-col gap-y-2">
-            <Label>Price</Label>
-            <Input min={0} name="price" placeholder="Set price for your product." type="number" />
+            <Label htmlFor="price">Price</Label>
+            <Input id="price" min={0} name="price" placeholder="Set price for your product." type="number" />
             {state?.errors?.["price"]?.[0] && <p className="text-destructive">{state.errors?.["price"]?.[0]}</p>}
           </div>
           <div className="flex flex-col gap-y-2">
-            <Label>Small Sumary</Label>
+            <Label htmlFor="smallDescription">Small Sumary</Label>
             <Textarea
               required
+              id="smallDescription"
               name="smallDescription"
               minLength={10}
               placeholder="Please describe your product shortly right here..."
@@ -88,11 +90,17 @@ const SellForm = () => {
           </div>
           <div className="flex flex-col gap-y-2">
             <input type="hidden" name="description" value={JSON.stringify(descriptionJson)} />
-            <Label>Description</Label>
+            <Label>Public description</Label>
             <TipTapEditor json={descriptionJson} setJson={setDescriptionJson} />
             {state?.errors?.["description"]?.[0] && (
               <p className="text-destructive">{state.errors?.["description"]?.[0]}</p>
             )}
+          </div>
+          <div className="flex flex-col gap-y-2">
+            <input type="hidden" name="guide" value={JSON.stringify(guideJson)} />
+            <Label>Guide available if the product is purchased</Label>
+            <TipTapEditor json={guideJson} setJson={setGuideJson} />
+            {state?.errors?.["guide"]?.[0] && <p className="text-destructive">{state.errors?.["guide"]?.[0]}</p>}
           </div>
           <div>
             <input type="hidden" name="tags" value={JSON.stringify(tags)} />

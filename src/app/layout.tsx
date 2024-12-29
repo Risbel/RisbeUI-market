@@ -43,7 +43,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Risbel" }],
   creator: "Risbel",
-  manifest: "/manifest.json",
   icons: {
     icon: ["/favicon.ico"],
     apple: ["/apple-icon.png"],

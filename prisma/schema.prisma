@@ -19,7 +19,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Product Product[]
+  Product  Product[]
+  Purchase Purchase[]
 }
 
 model Product {
@@ -28,6 +29,7 @@ model Product {
   price            Int
   smallDescription String
   description      Json?
+  guide            Json?
   images           String[]
   codeUrl          String
   category         String
@@ -37,7 +39,8 @@ model Product {
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
 
-  Tags Tag[] @relation("ProductTags")
+  Tags     Tag[]      @relation("ProductTags")
+  Purchase Purchase[]
 }
 
 model Tag {
@@ -48,4 +51,15 @@ model Tag {
   updatedAt DateTime @updatedAt
 
   Products Product[] @relation("ProductTags")
+}
+
+model Purchase {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+
+  User    User    @relation(fields: [userId], references: [id])
+  Product Product @relation(fields: [productId], references: [id])
 }

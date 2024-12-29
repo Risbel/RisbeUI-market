@@ -24,7 +24,7 @@ const SettingsPage = async () => {
   const user = await getUser();
 
   if (!user) {
-    redirect("/login"); // Redirige al usuario no autenticado
+    redirect("/api/auth/login?");
     return null;
   }
 

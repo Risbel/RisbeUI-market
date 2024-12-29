@@ -26,7 +26,7 @@ export function CodePreview({ jsx, css }: CodePreviewProps) {
   }, [jsx, css]);
 
   return (
-    <Tabs defaultValue="jsx" className="w-full col-span-7">
+    <Tabs defaultValue="jsx" className="w-full">
       <div className="flex justify-between items-center mb-4">
         <TabsList>
           <TabsTrigger value="jsx">JSX</TabsTrigger>
@@ -37,13 +37,13 @@ export function CodePreview({ jsx, css }: CodePreviewProps) {
         </Button>
       </div>
       <TabsContent value="jsx">
-        <pre className="bg-muted p-4 rounded-md overflow-x-auto">
+        <pre className="bg-muted rounded-md overflow-x-auto">
           <code className="language-javascript">{jsx}</code>
         </pre>
       </TabsContent>
       {css && (
         <TabsContent value="css">
-          <pre className="bg-muted p-4 rounded-md overflow-x-auto">
+          <pre className="bg-muted rounded-md overflow-x-auto">
             <code className="language-css">{css}</code>
           </pre>
         </TabsContent>
