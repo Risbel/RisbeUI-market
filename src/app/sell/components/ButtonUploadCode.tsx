@@ -39,7 +39,6 @@ const ButtonUploadCode = ({
 
   return (
     <Button
-      id="code"
       type="button"
       disabled={isPending || isDesabled ? true : false}
       onClick={() => handleClickUploadCode(code)}

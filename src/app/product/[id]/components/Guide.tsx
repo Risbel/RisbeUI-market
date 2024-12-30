@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import React from "react";
 import ProductJson from "./ProductJson";
 
-const Guide = async ({ productId }: { productId: string }) => {
+const Guide = async ({ productId, productPrice }: { productId: string; productPrice: number }) => {
   noStore();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
@@ -13,27 +13,42 @@ const Guide = async ({ productId }: { productId: string }) => {
     return null;
   }
 
-  const data = await prisma.purchase.findFirst({
-    where: {
-      userId: user.id,
-      productId,
-    },
-    select: {
-      Product: {
-        select: {
-          guide: true, // only included if the purchase exists
+  let guide;
+
+  if (productPrice === 0) {
+    // if the price is 0 bring the guide directly
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: {
+        guide: true,
+      },
+    });
+
+    guide = product?.guide;
+  } else {
+    // but if price is greater than 0 bring the guide by his purchase
+    const purchase = await prisma.purchase.findFirst({
+      where: {
+        userId: user.id,
+        productId,
+      },
+      select: {
+        Product: {
+          select: {
+            guide: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!data) {
+    guide = purchase?.Product.guide;
+  }
+
+  if (!guide) {
     return null;
   }
 
-  const description = data.Product.guide;
-
-  return <ProductJson content={description as string} />;
+  return <ProductJson content={guide as string} />;
 };
 
 export default Guide;

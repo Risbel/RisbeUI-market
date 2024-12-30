@@ -9,8 +9,6 @@ import "prismjs/themes/prism-tomorrow.css";
 
 const themes = {
   "atom-one-dark": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css",
-  github: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css",
-  monokai: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css",
 } as const;
 
 const CodeInput = ({
@@ -52,20 +50,9 @@ const CodeInput = ({
 
   return (
     <div className="p-4 border rounded-lg">
-      <div className="mb-4 flex flex-col max-w-40 border rounded-md ">
-        <select
-          value={theme}
-          onChange={(e: any) => setTheme(e.target.value)}
-          className="p-2 pr-2 rounded bg-gray-100 text-xs h-8 focus:outline-none"
-        >
-          <option value="atom-one-dark">Atom One Dark</option>
-          <option value="github">GitHub</option>
-          <option value="monokai">Monokai</option>
-        </select>
-      </div>
-
       <div className="overflow-hidden overflow-x-scroll">
         <Editor
+          id="code"
           disabled={isDesabled}
           value={code}
           onValueChange={(code) => setCode(code)}

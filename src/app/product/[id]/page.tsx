@@ -84,11 +84,11 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
       <ProductJson content={data?.description as string} />
 
       <Suspense fallback={<Skeleton className="h-52 w-full" />}>
-        <Guide productId={params.id} />
+        <Guide productId={params.id} productPrice={data?.price as number} />
       </Suspense>
 
       <Suspense fallback={<Skeleton className="h-52 w-full" />}>
-        <SourceCode productId={params.id} />
+        <SourceCode productId={params.id} productPrice={data?.price as number} />
       </Suspense>
     </div>
   );

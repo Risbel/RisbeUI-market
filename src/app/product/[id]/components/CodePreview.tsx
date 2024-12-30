@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark.css"; // Importa el tema
+import "highlight.js/styles/atom-one-dark.css";
 
 interface CodePreviewProps {
   jsx: string;
