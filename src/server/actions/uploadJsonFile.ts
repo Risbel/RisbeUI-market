@@ -9,8 +9,8 @@ export async function uploadJsonFile(code: Code) {
   const utapi = new UTApi();
 
   const codeSchema = z.object({
-    jsx: z.string().min(10, { message: "Minimum length of 10 required" }),
-    tsx: z.string().min(10, { message: "Minimum length of 10 required" }),
+    jsx: z.string().min(10, { message: "Minimum length of 10 required" }).optional().or(z.literal("")),
+    tsx: z.string().min(10, { message: "Minimum length of 10 required" }).optional().or(z.literal("")),
   });
 
   const validateField = codeSchema.safeParse(code);

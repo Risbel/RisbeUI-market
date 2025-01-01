@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import ProductCard from "./ProductCard";
 import { Suspense } from "react";
 import FallbackRow from "./FallbackRow";
+import { ArrowBigRightIcon, ArrowRight } from "lucide-react";
 
 interface iAppProps {
   category: "newest" | "templates" | "uikits" | "components";
@@ -119,8 +120,12 @@ export const LoadRows = async ({ category }: iAppProps) => {
     <>
       <div className="md:flex md:items-center md:justify-between">
         <h2 className="text-2xl font-extrabold tracking-tight">{data.title}</h2>
-        <Link href={data.link} className="text-sm hidden font-medium text-primary hover:text-primary/90 md:block">
-          All Products <span>&rarr;</span>
+        <Link
+          href={data.link}
+          className="text-sm hidden font-medium text-primary hover:text-primary/80 md:flex gap-1 items-center group"
+        >
+          <span>All Products</span>
+          <ArrowRight height={15} width={15} className="group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-4 gap-6">

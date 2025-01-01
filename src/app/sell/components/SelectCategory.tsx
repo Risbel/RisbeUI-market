@@ -19,7 +19,10 @@ const SelectCategory = ({
         return (
           <div key={item.id} className="cursor-pointer">
             <Card
-              className={cn(selectedCategory === item.name ? "border-primary border-2" : "border-primary/10 border-2")}
+              className={cn(
+                selectedCategory === item.name ? "border-primary border-2" : "border-primary/10 border-2",
+                "hover:shadow-md hover:shadow-blue-500 transition-shadow"
+              )}
               onClick={() => setSelectedCategory(item.name)}
             >
               <CardHeader>{item.image}</CardHeader>

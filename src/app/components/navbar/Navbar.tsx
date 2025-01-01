@@ -11,7 +11,7 @@ const Navbar = async () => {
   const user = await getUser();
 
   return (
-    <div className="fixed z-50 backdrop-blur-md w-screen border-b flex justify-between md:grid md:grid-cols-12 items-center px-4 sm:px-16 lg:px-32 mx-auto py-2">
+    <div className="fixed z-50 bg-white/50 backdrop-blur-md w-screen border-b flex justify-between md:grid md:grid-cols-12 items-center px-4 sm:px-16 lg:px-32 mx-auto py-2">
       <div className="md:col-span-3">
         <Link href="/" className="flex gap-2 items-center">
           <img height={33} width={150} src="/RisbeUI-icon-og-png.png" alt="RisbeUI-icon" />

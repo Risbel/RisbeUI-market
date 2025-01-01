@@ -30,11 +30,14 @@ const NavbarLinks = () => {
   const location = usePathname();
 
   return (
-    <div className="col-span-6 hidden md:flex justify-center gap-8">
+    <div className="col-span-6 hidden md:flex justify-center gap-6">
       {navbarLinks.map((link) => {
         return (
           <Link
-            className={cn("text-sm", location === link.href ? "font-bold" : "text-gray-600")}
+            className={cn(
+              "text-sm font-semibold border border-transparent px-2 rounded-md",
+              location === link.href ? "text-blue-600" : "text-gray-600 hover:text-blue-500"
+            )}
             key={link.id}
             href={link.href}
           >
