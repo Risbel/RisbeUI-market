@@ -23,7 +23,6 @@ const getData = async (userId: string) => {
 };
 
 const Sell = async () => {
-  noStore();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 

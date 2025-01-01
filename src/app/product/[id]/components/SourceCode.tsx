@@ -2,12 +2,13 @@ import prisma from "@/app/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { unstable_noStore as noStore } from "next/cache";
 import React from "react";
-import { CodePreview } from "./CodePreview";
 
 import { BuyProduct } from "@/server/actions/stripe";
 import UnlockButton from "./UnlockButton";
+import { CodePreview } from "./CodePreview";
 
-const mockCode = `
+const mockCode = {
+  tsx: `
 import React from 'react';
 
 const RisbeUI: React.FC = () => {
@@ -46,7 +47,8 @@ const RisbeUI: React.FC = () => {
   );
 };
 
-export default RisbeUI;`;
+export default RisbeUI;`,
+};
 
 async function getProductWithPurchase(userId: string, productId: string) {
   return await prisma.purchase.findFirst({
@@ -119,7 +121,7 @@ const SourceCode = async ({ productId, productPrice }: { productId: string; prod
             <UnlockButton />
           </form>
           <div className="px-8 py-6 w-full">
-            <CodePreview jsx={mockCode} />
+            <CodePreview codeData={mockCode} />
           </div>
         </div>
       );
@@ -127,13 +129,12 @@ const SourceCode = async ({ productId, productPrice }: { productId: string; prod
   }
 
   const dataCode = codeUrl && (await getCodeFromUrl(codeUrl));
-  const productCode = dataCode?.code;
 
-  if (!productCode) {
-    return <CodePreview jsx={`//No code bro, contact us to resolve this issue.`} />;
+  if (!dataCode) {
+    return <CodePreview codeData={{ jsx: `//No code bro, contact us to resolve this issue.` }} />;
   }
 
-  return <CodePreview jsx={productCode} />;
+  return <CodePreview codeData={dataCode} />;
 };
 
 export default SourceCode;

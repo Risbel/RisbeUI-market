@@ -2,23 +2,23 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { uploadJsonFile } from "@/server/actions/uploadJsonFile";
 import { Loader, UploadCloud } from "lucide-react";
-import { useTransition } from "react";
+import { SetStateAction, useTransition } from "react";
+import { Code } from "./SellForm";
 
 const ButtonUploadCode = ({
   code,
   setUploadedCodeUrl,
-  isDesabled,
+  isDisabled,
 }: {
-  code: string;
-  setUploadedCodeUrl: React.Dispatch<React.SetStateAction<string | null>>;
-  isDesabled?: boolean;
+  code: Code;
+  setUploadedCodeUrl: React.Dispatch<SetStateAction<string>>;
+  isDisabled?: boolean;
 }) => {
   const [isPending, startTransition] = useTransition();
 
-  const handleClickUploadCode = (code: string) => {
+  const handleUploadCode = (code: Code) => {
     startTransition(async () => {
       const { status, message, data } = await uploadJsonFile(code);
-
       if (status === "success") {
         toast({
           variant: "default",
@@ -32,7 +32,6 @@ const ButtonUploadCode = ({
           description: `Unexpected error. ${message}`,
         });
       }
-
       setUploadedCodeUrl(data);
     });
   };
@@ -40,11 +39,11 @@ const ButtonUploadCode = ({
   return (
     <Button
       type="button"
-      disabled={isPending || isDesabled ? true : false}
-      onClick={() => handleClickUploadCode(code)}
-      className="flex items-center gap-2 mt-2"
+      disabled={isPending || isDisabled ? true : false}
+      onClick={() => handleUploadCode(code)}
+      className="flex items-center gap-2 mt-2 max-w-fit"
     >
-      <span className="text-xs"> {isPending ? "Uploading..." : "Upload code </>"}</span>
+      <span className="text-xs"> {isPending ? "Uploading..." : "Upload code"}</span>
       {isPending ? <Loader className="animate-spin stroke-white" /> : <UploadCloud />}
     </Button>
   );

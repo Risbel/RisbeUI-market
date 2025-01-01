@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import SelectCategory from "./SelectCategory";
 import { Textarea } from "@/components/ui/textarea";
 import TipTapEditor from "@/app/components/editor/Editor";
-import { CheckCircle2Icon } from "lucide-react";
+import { Check, CheckCircle2Icon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -20,6 +20,11 @@ import { Tag, TagsSelector } from "./TagsSelector";
 import { useRouter } from "next/navigation";
 import SubmitButton from "@/app/components/buttons/SubmitButton";
 
+export interface Code {
+  jsx: string;
+  tsx: string;
+}
+
 const SellForm = () => {
   const router = useRouter();
   const initialState: State = { message: "", status: undefined };
@@ -29,8 +34,11 @@ const SellForm = () => {
   const [guideJson, setGuideJson] = useState<null | JSONContent>(null);
 
   const [uploadedImagesUrls, setUploadedImagesUrls] = useState<string[]>([]);
-  const [code, setCode] = useState("");
-  const [uploadedCodeUrl, setUploadedCodeUrl] = useState<string | null>(null);
+
+  const [code, setCode] = useState<Code>({ jsx: "", tsx: "" });
+  const [uploadedCodeUrl, setUploadedCodeUrl] = useState("");
+  const [activeFormat, setActiveFormat] = useState<"jsx" | "tsx">("jsx");
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [tags, setTags] = useState<Tag[]>([]);
 
@@ -51,6 +59,8 @@ const SellForm = () => {
       });
     }
   }, [state]);
+
+  const formats: ("jsx" | "tsx")[] = ["jsx", "tsx"];
 
   return (
     <form action={formAction}>
@@ -98,7 +108,7 @@ const SellForm = () => {
           </div>
           <div className="flex flex-col gap-y-2">
             <input type="hidden" name="guide" value={JSON.stringify(guideJson)} />
-            <Label>Guide available if the product is purchased</Label>
+            <Label>Guide available if product is purchased</Label>
             <TipTapEditor json={guideJson} setJson={setGuideJson} />
             {state?.errors?.["guide"]?.[0] && <p className="text-destructive">{state.errors?.["guide"]?.[0]}</p>}
           </div>
@@ -107,23 +117,49 @@ const SellForm = () => {
             <Label>Tags</Label>
             <TagsSelector tags={tags} setTags={setTags} />
           </div>
-          <div>
-            <input type="hidden" name="code" value={uploadedCodeUrl ?? ""} />
-            <Label htmlFor="code">Code</Label>
-            <CodeInput code={code} setCode={setCode} isDesabled={uploadedCodeUrl ? true : false} />
 
-            {!uploadedCodeUrl ? (
-              <div className="flex justify-center">
-                <ButtonUploadCode
-                  code={code}
-                  setUploadedCodeUrl={setUploadedCodeUrl}
-                  isDesabled={!code ? true : false}
-                />
-              </div>
-            ) : (
-              <div className="flex items-center max-w-max font-medium text-green-900 gap-2 mt-2 px-4 py-2 bg-green-200 rounded-md">
-                <p>Uploaded successfuly</p>
-                <CheckCircle2Icon />
+          <div className="flex flex-col gap-2 border p-3 rounded-lg">
+            <input type="hidden" name="code" value={uploadedCodeUrl} />
+
+            <div className="flex gap-2 items-center">
+              {formats.map((format) => (
+                <button
+                  type="button"
+                  key={format}
+                  onClick={() => setActiveFormat(format)}
+                  className={`relative px-4 pr-8 py-2 rounded-md transition ${
+                    activeFormat === format ? "bg-blue-600 text-white" : "bg-gray-200 text-black"
+                  }`}
+                >
+                  {format.toUpperCase()}
+                  {code[format] && (
+                    <Check className="absolute top-1 right-1 h-4 w-4 rounded-md border border-black stroke-black bg-white"></Check>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <CodeInput
+              id={activeFormat}
+              code={code[activeFormat]}
+              setCode={(newCode: string) =>
+                setCode((prev) => ({
+                  ...prev,
+                  [activeFormat]: newCode,
+                }))
+              }
+              isDisabled={false}
+            />
+
+            <ButtonUploadCode
+              isDisabled={(!code.jsx && !code.tsx) || uploadedCodeUrl ? true : false}
+              setUploadedCodeUrl={setUploadedCodeUrl}
+              code={code}
+            />
+
+            {uploadedCodeUrl && (
+              <div className="mt-2">
+                <p className="text-green-600">Code uploaded successfully</p>
               </div>
             )}
           </div>
@@ -149,7 +185,7 @@ const SellForm = () => {
           <SubmitButton
             title="Create product"
             loadingText="Creating product..."
-            isDisabled={!uploadedCodeUrl || uploadedImagesUrls.length === 0}
+            isDisabled={!setUploadedCodeUrl || uploadedImagesUrls.length === 0}
           />
         </CardFooter>
       </Card>

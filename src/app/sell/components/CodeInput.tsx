@@ -12,13 +12,15 @@ const themes = {
 } as const;
 
 const CodeInput = ({
+  id,
   code,
   setCode,
-  isDesabled,
+  isDisabled,
 }: {
+  id: string;
   code: string;
   setCode: React.SetStateAction<any>;
-  isDesabled?: boolean;
+  isDisabled?: boolean;
 }) => {
   type ThemeKeys = keyof typeof themes;
   const [theme, setTheme] = useState<ThemeKeys>("atom-one-dark");
@@ -52,8 +54,8 @@ const CodeInput = ({
     <div className="p-4 border rounded-lg">
       <div className="overflow-hidden overflow-x-scroll">
         <Editor
-          id="code"
-          disabled={isDesabled}
+          id={id}
+          disabled={isDisabled}
           value={code}
           onValueChange={(code) => setCode(code)}
           highlight={highlightCode}

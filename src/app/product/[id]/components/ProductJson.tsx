@@ -13,7 +13,7 @@ const ProductJson = ({ content }: { content: string }) => {
     content: editorContent,
     editorProps: {
       attributes: {
-        class: "w-full",
+        class: "focus:outline-none min-w-full min-h-[150px] prose prose-sm sm:prose-base space-y-4",
       },
     },
   });

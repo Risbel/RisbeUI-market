@@ -37,7 +37,7 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
   const data = await getData(params.id);
 
   return (
-    <div className="flex flex-col px-6 md:px-10 gap-12">
+    <div className="flex flex-col px-6 md:px-10 gap-12 mb-20">
       <div className="flex flex-col-reverse md:flex-row md:gap-12">
         <Carousel className="w-full md:w-1/2">
           <CarouselContent>

@@ -1,19 +1,19 @@
 "use server";
 
+import { Code } from "@/app/sell/components/SellForm";
 import { State } from "@/types/state";
 import { UTApi, UTFile } from "uploadthing/server";
 import { z } from "zod";
 
-export async function uploadJsonFile(code: string) {
+export async function uploadJsonFile(code: Code) {
   const utapi = new UTApi();
 
   const codeSchema = z.object({
-    code: z.string().min(10, { message: "Minimum length of 10 required" }),
+    jsx: z.string().min(10, { message: "Minimum length of 10 required" }),
+    tsx: z.string().min(10, { message: "Minimum length of 10 required" }),
   });
 
-  const validateField = codeSchema.safeParse({
-    code: code,
-  });
+  const validateField = codeSchema.safeParse(code);
 
   if (!validateField.success) {
     const state: State = {
@@ -26,7 +26,7 @@ export async function uploadJsonFile(code: string) {
   }
 
   // Create a JSON file
-  const file = new UTFile([JSON.stringify({ code }, null, 2)], "code.json", {
+  const file = new UTFile([JSON.stringify(code, null, 2)], "code.json", {
     type: "application/json",
   });
 
