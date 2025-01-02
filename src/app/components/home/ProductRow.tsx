@@ -16,6 +16,7 @@ export const getData = async ({ category }: iAppProps) => {
       const data = await prisma.product.findMany({
         where: {
           category: "component",
+          isDeleted: false,
         },
         select: {
           price: true,
@@ -35,6 +36,9 @@ export const getData = async ({ category }: iAppProps) => {
     }
     case "newest": {
       const data = await prisma.product.findMany({
+        where: {
+          isDeleted: false,
+        },
         select: {
           price: true,
           name: true,
@@ -58,6 +62,7 @@ export const getData = async ({ category }: iAppProps) => {
       const data = await prisma.product.findMany({
         where: {
           category: "template",
+          isDeleted: false,
         },
         select: {
           price: true,
@@ -79,6 +84,7 @@ export const getData = async ({ category }: iAppProps) => {
       const data = await prisma.product.findMany({
         where: {
           category: "uikit",
+          isDeleted: false,
         },
         select: {
           price: true,

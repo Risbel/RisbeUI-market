@@ -12,35 +12,33 @@ const DeleteProductButton = ({ id }: { id: string }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async (id: string) => {
-    if (confirm("¿Estás seguro de que quieres eliminar este producto?")) {
-      setIsLoading(true);
+    setIsLoading(true);
 
-      try {
-        const response = await DeleteProduct(id);
+    try {
+      const response = await DeleteProduct(id);
 
-        if (response.status === "success") {
-          toast({
-            title: "Product deleted",
-            description: "Product deleted successfuly.",
-            variant: "default",
-          });
-          router.refresh(); // Refresca los datos dinámicos
-        } else {
-          toast({
-            title: "Unespected error",
-            description: response.message || "Your product can't be deleted.",
-            variant: "default",
-          });
-        }
-      } catch (error) {
+      if (response.status === "success") {
         toast({
-          title: "Unespected error",
-          description: "Unespected error during the delete action",
+          title: "Product deleted",
+          description: "Product deleted successfuly.",
           variant: "default",
         });
-      } finally {
-        setIsLoading(false);
+        router.refresh(); // Refresca los datos dinámicos
+      } else {
+        toast({
+          title: "Unespected error",
+          description: response.message || "Your product can't be deleted.",
+          variant: "default",
+        });
       }
+    } catch (error) {
+      toast({
+        title: "Unespected error",
+        description: "Unespected error during the delete action",
+        variant: "default",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
   return (

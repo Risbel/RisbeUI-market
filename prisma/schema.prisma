@@ -33,20 +33,23 @@ model Product {
   images           String[]
   codeUrl          String
   category         String
+  isDeleted        Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 
   Tags     Tag[]      @relation("ProductTags")
   Purchase Purchase[]
 }
 
 model Tag {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  icon      String
+  id   String @id @default(uuid())
+  name String @unique
+  icon String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -54,10 +57,11 @@ model Tag {
 }
 
 model Purchase {
-  id        String   @id @default(uuid())
+  id        String @id @default(uuid())
   userId    String
   productId String
-  quantity  Int      @default(1)
+  quantity  Int    @default(1)
+
   createdAt DateTime @default(now())
 
   User    User    @relation(fields: [userId], references: [id])

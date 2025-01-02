@@ -110,7 +110,6 @@ export async function DeleteProduct(productId: string) {
   }
 
   try {
-    // Verifica si el producto pertenece al usuario
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
@@ -119,19 +118,19 @@ export async function DeleteProduct(productId: string) {
       throw new Error("Product not found or you do not have permission to delete it.");
     }
 
-    // Elimina el producto
-    await prisma.product.delete({
+    await prisma.product.update({
       where: { id: productId },
+      data: { isDeleted: true },
     });
 
     return {
       status: "success",
-      message: "Product deleted successfuly",
+      message: "Product marked as deleted successfully",
     };
   } catch (error) {
     return {
       status: "error",
-      message: "The product could not be deleted",
+      message: "The product could not be marked as deleted",
     };
   }
 }

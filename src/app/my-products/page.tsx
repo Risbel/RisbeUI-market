@@ -9,6 +9,7 @@ const getData = async (userId: string) => {
   const data = await prisma.product.findMany({
     where: {
       userId: userId,
+      isDeleted: false,
     },
     select: {
       name: true,
@@ -47,7 +48,9 @@ const MyProducts = async () => {
                 price={item.price}
                 smallDescription={item.smallDescription}
               />
-              <DeleteProductButton id={item.id} />
+              <div className="p-4 bg-gray-50 hover:shadow-md rounded-lg">
+                <DeleteProductButton id={item.id} />
+              </div>
             </div>
           );
         })}

@@ -58,23 +58,24 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-    },
-    animation: {
-      "text-gradient": "text-gradient 3.5s linear infinite",
-      "background-shine": "background-shine 6s linear infinite",
-    },
-    keyframes: {
-      "text-gradient": {
-        to: {
-          backgroundPosition: "200% center",
-        },
+
+      animation: {
+        "text-gradient": "text-gradient 3.5s linear infinite",
+        "background-shine": "background-shine 6s linear infinite",
       },
-      "background-shine": {
-        from: {
-          backgroundPosition: "0 0",
+      keyframes: {
+        "text-gradient": {
+          to: {
+            backgroundPosition: "200% center",
+          },
         },
-        to: {
-          backgroundPosition: "-200% 0",
+        "background-shine": {
+          from: {
+            backgroundPosition: "0 0",
+          },
+          to: {
+            backgroundPosition: "-200% 0",
+          },
         },
       },
     },

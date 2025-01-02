@@ -31,6 +31,7 @@ async function getData(category: string) {
   const data = prisma.product.findMany({
     where: {
       category: input,
+      isDeleted: false,
     },
     select: {
       id: true,
